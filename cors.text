@@ -1,0 +1,1 @@
+the cors.json is added to firebase storage using Google Cloud Console's terminal and gsutil tools to enable CORS functionality

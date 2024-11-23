@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.98.0">
+    <title>User Authentication</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/cover/">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+      body {
+        background: url(https://res.cloudinary.com/dsjt220g8/image/upload/v1731417821/newbaack_tnvhei.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .center-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .form-container {
+        background: rgba(255, 255, 255, 0.8);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 500px;
+        height: 100vh;
+        overflow-y: auto; /* Enable vertical scrolling */
+      }
+      .form-container h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        color: black;
+      }
+      .form-container input,
+      .form-container textarea,
+      .form-container button,
+      .form-container select {
+        width: 100%;
+        margin-bottom: 1rem;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+      .form-container button {
+        background-color: #000;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+      .form-container button:hover {
+        background-color: #444;
+      }
+
+      /* Optional custom style for dropdown to match other inputs */
+      .form-container select {
+        padding: 0.75rem; /* Matches the inputs */
+        font-size: 1rem; /* Matches the inputs */
+        border-radius: 5px; /* Matches the inputs */
+        border: 1px solid #ddd; /* Matches the inputs */
+      }
+
+      .form-container input[type="file"] {
+        color: black; /* Set the file input text color to black */
+      }
+
+      .logout-button {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+      }
+      .username {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        font-size: 1.25rem;
+        color: black;
+        font-weight: bold;
+      }
+
+      /* Preview styles */
+      .media-preview {
+        margin-top: 1rem;
+        text-align: center;
+      }
+      audio {
+        width: 100%;
+      }
+
+      /* Card styles */
+      .card-custom {
+  margin-bottom: 1rem;
+  border: 2px solid black; /* Add black border */
+}
+
+      .card-custom input[type="radio"] {
+  margin-right: 5px;
+  width: 17px; /* Set the width of the radio button */
+  height: 17px; /* Set the height of the radio button */
+}
+
+
+.card-custom label {
+  color: #000; /* Set labels to black */
+  font-weight: 500; /* Optional: Slightly bold for better visibility */
+}
+
+.card-custom .radio-group {
+  display: flex; /* Align radio buttons and labels */
+  flex-direction: column; /* Stack them vertically */
+  align-items: flex-start; /* Align to the left */
+  gap: 10px; /* Add space between radio options */
+}
+
+      /* Card title color */
+      .card-title {
+        color: black; /* Set card titles to black */
+      }
+      .card-text {
+        color: black; /* Set card titles to black */
+      }
+
+    /* Styling for circular buttons */
+    /* Ensure the circular buttons take precedence over Bootstrap styles */
+.btn-circle {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  font-size: 1.5rem;
+  line-height: 0; /* Remove any potential line-height that might disrupt the circle */
+  text-align: center;
+  overflow: hidden; /* Hide any overflow that doesn't fit within the circle */
+}
+
+/* Optional: Adjust size for icon to ensure it's centered and fits well */
+.btn-circle i {
+  font-size: 1.5rem;
+}
+
+/* Prevent Bootstrap's default .btn classes from interfering */
+.btn.btn-primary, .btn.btn-warning, .btn.btn-success, .btn.btn-danger {
+  padding: 0; /* Remove padding to maintain the circle */
+  height: 60px;
+  width: 60px;
+}
+
+
+    #status-message {
+    color: black;
+    font-weight: bold;
+    }
+
+    #recording-status {
+  color: black;
+  font-weight: bold;
+  margin-top: 10px;
+  background-color: rgb(253, 253, 245); /* Temporary background to debug visibility */
+  padding: 5px;
+  font-size: 1.2rem; /* Adjust font size to make it easier to see */
+}
+
+
+    /* Increase the width of the "Record Again" button */
+    #re-record {
+    width: 100%;
+    margin-top: 10px;
+    }
+
+    /* Margin between pause/resume and stop buttons */
+#pause-recording, #resume-recording, #stop-recording {
+  margin-right: 10px; /* Add space between buttons */
+}
+
+    /* Optional: Hover effect for the circular buttons */
+    .btn-circle:hover {
+    opacity: 0.8;
+    }
+
+    </style>
+  </head>
+  <body class="d-flex h-100 text-center text-white bg-white">
+    <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column center-content">
+      <div class="username">𝑯𝒆𝒍𝒍𝒐 <span id="username"><%= name %></span></div>
+      <div class="form-container">
+        <h1>𝘼𝙪𝙙𝙞𝙤 𝙂𝙚𝙣𝙚𝙧𝙖𝙩𝙞𝙤𝙣</h1>
+
+
+ <!-- Card for Recording Audio -->
+<div class="card card-custom">
+    <div class="card-body">
+      <h5 class="card-title">𝙍𝙚𝙘𝙤𝙧𝙙 𝘼𝙪𝙙𝙞𝙤</h5>
+      <p class="card-text">Click the mic to start recording, you can use the pause/stop buttons as needed.</p>
+  
+      <!-- Circular buttons for controlling recording -->
+      <div class="d-flex justify-content-center align-items-center">
+        <button id="start-recording" class="btn btn-primary btn-circle" style="font-size: 1.5rem;">
+          <i class="bi bi-mic-fill"></i> <!-- Icon for Record -->
+        </button>
+        <button id="pause-recording" class="btn btn-warning btn-circle" style="display: none; font-size: 1.5rem;">
+          <i class="bi bi-pause-fill"></i> <!-- Icon for Pause -->
+        </button>
+        <button id="resume-recording" class="btn btn-success btn-circle" style="display: none; font-size: 1.5rem;">
+          <i class="bi bi-play-fill"></i> <!-- Icon for Resume -->
+        </button>
+        <button id="stop-recording" class="btn btn-danger btn-circle" style="display: none; font-size: 1.5rem;">
+          <i class="bi bi-stop-fill"></i> <!-- Icon for Stop -->
+        </button>
+      </div>
+  
+      <p id="status-message" style="margin-top: 10px;"></p>
+
+      <p id="recording-status" style="color: black; font-weight: bold; margin-top: 10px; display: none;">Recording...</p>
+  
+      <!-- Audio preview and control -->
+      <div class="media-preview" style="display: none;">
+        
+        <audio id="audio-preview" controls style="width: 100%; margin-top: 15px;"></audio>
+        <input type="text" id="audio-name" placeholder="Audio Name" style="color: black;" />
+      </div>
+  
+      <!-- Save and Record buttons -->
+      <div id="action-buttons" style="display: none; text-align: center; margin-top: 15px;">
+        <button id="save-audio" style="position: relative; display: flex; justify-content: center; align-items: center; padding: 0.75rem;">
+          Save
+          <div id="uploadSpinner" style="display: none; position: absolute; left: 50%; transform: translateX(-50%);">
+            <div class="spinner-border text-light" role="status">
+              <span class="visually-hidden">Saving...</span>
+            </div>
+          </div>
+        </button>
+        <button id="re-record" class="btn btn-secondary" style="width: 100%; margin-top: 10px;">Record Again</button>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+
+        <!-- Card for Uploading Audio -->
+<div class="card card-custom">
+    <div class="card-body">
+      <h5 class="card-title">𝙐𝙥𝙡𝙤𝙖𝙙 𝘼𝙪𝙙𝙞𝙤</h5>
+      <p class="card-text">Choose an audio file either from your local storage or from recorded files.</p>
+      
+      <!-- Option for Local File Upload -->
+      <div style="margin-bottom: 15px;">
+        <label>
+          <input 
+            type="radio" 
+            name="upload-option" 
+            value="local" 
+            id="local-option" 
+            checked 
+          />
+          𝘜𝘱𝘭𝘰𝘢𝘥 𝘧𝘳𝘰𝘮 𝘓𝘰𝘤𝘢𝘭 𝘚𝘵𝘰𝘳𝘢𝘨𝘦
+        </label>
+        <input 
+          type="file" 
+          id="upload-audio-file" 
+          class="form-control mt-2" 
+          accept="audio/*" 
+          disabled 
+        />
+      </div>
+  
+      <!-- Option for Firebase File Selection -->
+      <div style="margin-bottom: 15px;">
+        <label>
+          <input 
+            type="radio" 
+            name="upload-option" 
+            value="firebase" 
+            id="firebase-option" 
+          />
+          𝘚𝘦𝘭𝘦𝘤𝘵 𝘧𝘳𝘰𝘮 𝘙𝘦𝘤𝘰𝘳𝘥𝘦𝘥 𝘍𝘪𝘭𝘦𝘴
+        </label>
+        <select 
+          id="firebase-audio-select" 
+          class="form-control mt-2" 
+          disabled
+        >
+          <option value="">-- Select from recorded files --</option>
+          <!-- Options populated dynamically -->
+        </select>
+        <small style="display: block; margin-top: 5px; color: #555;">Note: Please refresh to get recent recordings.</small>
+      </div>
+  
+      <!-- Upload Button -->
+      <button 
+        id="upload-audio-button" 
+        class="btn btn-secondary mt-2"
+      >
+        Upload
+      </button>
+    </div>
+  </div>
+  
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+  // Logic for setting and displaying the username
+  const name = "<%= name %>";
+  if (name && name !== "guest") {
+    sessionStorage.setItem("username", name);
+  }
+
+  const storedName = sessionStorage.getItem("username");
+  if (storedName) {
+    const usernameElement = document.getElementById("username");
+    usernameElement.textContent = storedName;
+  }
+
+  const startButton = document.getElementById("start-recording");
+  const pauseButton = document.getElementById("pause-recording");
+  const resumeButton = document.getElementById("resume-recording");
+  const stopButton = document.getElementById("stop-recording");
+  const audioPreview = document.getElementById("audio-preview");
+  const statusMessage = document.getElementById("status-message");
+  const recordingStatus = document.getElementById("recording-status");
+  const actionButtons = document.getElementById("action-buttons");
+
+  let mediaRecorder;
+  let audioChunks = [];
+  let audioBlob;
+  let audioUrl;
+
+  // Check if the browser supports MediaRecorder
+  if (!navigator.mediaDevices || !window.MediaRecorder) {
+    statusMessage.textContent = "Your browser does not support audio recording.";
+    return;
+  }
+
+  startButton.addEventListener('click', () => {
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+      audioChunks = [];
+
+      startButton.style.display = "none";
+      pauseButton.style.display = "inline-block";
+      stopButton.style.display = "block";
+      
+      // Show the recording status
+      recordingStatus.style.display = "inline-block";  // Ensure the status is visible
+      recordingStatus.textContent = "Recording...";  // Update the text content
+      recordingStatus.style.color = "black";  // Ensure the text color is black
+
+      // Handle audio data as it's recorded
+      mediaRecorder.ondataavailable = event => {
+        audioChunks.push(event.data);
+      };
+
+      // When recording stops
+      mediaRecorder.onstop = () => {
+        audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        audioUrl = URL.createObjectURL(audioBlob);
+        audioPreview.src = audioUrl;
+
+        // Show the audio preview and save options
+        document.querySelector('.media-preview').style.display = "block";
+        actionButtons.style.display = "block";
+
+        // Hide the recording status message when recording stops
+        recordingStatus.style.display = "none";
+      };
+    })
+    .catch(error => {
+      statusMessage.textContent = "Failed to access microphone.";
+      console.error(error);
+    });
+});
+
+
+
+  // Pause recording
+  pauseButton.addEventListener('click', () => {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
+      mediaRecorder.pause();
+      pauseButton.style.display = "none";
+      resumeButton.style.display = "inline-block"; // Show the Resume button
+      recordingStatus.textContent = "Recording paused...";
+    }
+  });
+
+  // Resume recording (if paused)
+  resumeButton.addEventListener('click', () => {
+    if (mediaRecorder && mediaRecorder.state === "paused") {
+      mediaRecorder.resume();
+      resumeButton.style.display = "none"; // Hide the Resume button
+      pauseButton.style.display = "inline-block"; // Show the Pause button
+      recordingStatus.textContent = "Recording resumed...";
+    }
+  });
+
+  // Stop recording
+  stopButton.addEventListener('click', () => {
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+      mediaRecorder.stop();
+      pauseButton.style.display = "none";
+      resumeButton.style.display = "none";
+      startButton.style.display = "none";
+      stopButton.style.display = "none";
+      recordingStatus.textContent = "Recording stopped.";
+    }
+  });
+
+ // Save audio
+document.getElementById("save-audio").addEventListener('click', () => {
+
+  // Show the loading spinner
+  const uploadSpinner = document.getElementById("uploadSpinner");
+  uploadSpinner.style.display = "inline-block"; // Show spinner
+  // Get the stored username from session storage
+  const username = sessionStorage.getItem("username");
+  const audioNameInput = document.getElementById("audio-name");
+  const audioName = audioNameInput.value.trim();
+
+  // Validate audio name
+  if (!audioName) {
+    alert("Please enter an audio name.");
+    return;
+  }
+  
+  // Check if the username exists (to ensure it's not "guest" or undefined)
+  if (!username) {
+    alert("Username is not available. Please log in again.");
+    return;
+  }
+
+  // Prepare FormData with audio and username
+  const formData = new FormData();
+  formData.append('audio', audioBlob); // Append the recorded audio file
+  formData.append('username', username); // Append the username to the form data
+  formData.append('audioname', audioName); // Append the audio name to the form data
+
+  // Send the FormData to the server
+  fetch('/save-audio', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.json()) // Expecting JSON response
+  .then(data => {
+    if (data.success) {
+      uploadSpinner.style.display = "none"; // Show alert if file is saved successfully
+      document.querySelector('.media-preview').style.display = "none";
+      actionButtons.style.display = "none";
+      startButton.style.display = "inline-block";
+      stopButton.style.display = "none";
+    } else {
+      alert("Error saving file"); // Show error message if something went wrong
+    }
+  })
+  .catch(error => {
+    console.error("Error uploading audio:", error);
+    alert("Failed to save file.");
+  });
+});
+
+
+  // Re-record
+  document.getElementById("re-record").addEventListener('click', () => {
+    document.querySelector('.media-preview').style.display = "none";
+    actionButtons.style.display = "none";
+    startButton.style.display = "inline-block";
+    stopButton.style.display = "none";
+  });
+
+  const localOption = document.getElementById('local-option');
+  const firebaseOption = document.getElementById('firebase-option');
+  const audioFileInput = document.getElementById('upload-audio-file');
+  const firebaseSelect = document.getElementById('firebase-audio-select');
+  const uploadButton = document.getElementById('upload-audio-button');
+
+  // Toggle inputs based on selected upload option
+  const toggleInputs = () => {
+    if (localOption.checked) {
+      audioFileInput.disabled = false;
+      firebaseSelect.disabled = true;
+      firebaseSelect.value = ""; // Clear Firebase selection
+    } else if (firebaseOption.checked) {
+      audioFileInput.disabled = true;
+      audioFileInput.value = ""; // Clear local file selection
+      firebaseSelect.disabled = false;
+    }
+  };
+
+  // Add event listeners to toggle options
+  localOption.addEventListener('change', toggleInputs);
+  firebaseOption.addEventListener('change', toggleInputs);
+
+  // Fetch recorded files from Firebase
+  const fetchRecordedFiles = async () => {
+    const username = sessionStorage.getItem("username");
+    if (!username) {
+      console.error("Username not found. Cannot fetch Firebase files.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/fetch-recorded-files?username=${username}`);
+      const data = await response.json();
+
+      if (data.success && data.files.length > 0) {
+        data.files.forEach((file) => {
+          const option = document.createElement("option");
+          option.value = file.url; // Firebase file URL
+          option.textContent = file.name; // Display file name
+          firebaseSelect.appendChild(option);
+        });
+      } else {
+        console.warn("No files found for the user.");
+      }
+    } catch (error) {
+      console.error("Error fetching recorded files:", error);
+    }
+  };
+
+  // Call the function to populate Firebase dropdown
+  fetchRecordedFiles();
+
+  // Handle Upload Button Click
+  uploadButton.addEventListener('click', async () => {
+    const selectedLocalFile = audioFileInput.files[0];
+    const selectedFirebaseFile = firebaseSelect.value;
+
+    // Validate selection
+    if (localOption.checked && !selectedLocalFile) {
+      return;
+    }
+    if (firebaseOption.checked && !selectedFirebaseFile) {
+      return;
+    }
+
+    const formData = new FormData();
+
+    if (localOption.checked) {
+      // Upload local file to Firebase and get the URL
+      const firebaseUrl = await uploadFileToFirebase(selectedLocalFile);
+      formData.append('audioUrl', firebaseUrl); // Send Firebase URL to the backend
+    } else if (firebaseOption.checked) {
+      // Use the selected Firebase file URL
+      formData.append('audioUrl', selectedFirebaseFile);
+    }
+
+// Convert FormData into URL query parameters
+const urlParams = new URLSearchParams();
+formData.forEach((value, key) => {
+  urlParams.append(key, value);
+});
+
+// Redirect to the /upload route with the URL parameters
+window.location.href = `/upload?${urlParams.toString()}`;
+
+  });
+
+  // Initialize input states
+  toggleInputs();
+});
+
+// Function to upload a file to Firebase and get its URL
+const uploadFileToFirebase = async (file) => {
+  const formData = new FormData();
+  formData.append('audio', file);  // Append the file to FormData
+
+  // Send the file to the backend for uploading to Firebase
+  try {
+    const response = await fetch('/upload-local', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      console.log("Audio uploaded successfully!");
+      return data.fileUrl;  // Return the file URL
+    } else {
+      console.error("Error uploading audio: " + data.error);
+      return null;  // Return null if upload failed
+    }
+  } catch (error) {
+    console.error("Error during upload:", error);
+    alert("Failed to upload audio.");
+    return null;  // Return null if there was an error
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>

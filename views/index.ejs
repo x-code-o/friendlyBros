@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en" class="h-100">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.98.0">
+    <title>User Authentication</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/cover/">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+
+    <style>
+      body {
+        background: url(https://res.cloudinary.com/dsjt220g8/image/upload/v1731417821/newbaack_tnvhei.jpg);
+        background-repeat: no-repeat; 
+        background-size: cover; 
+      }
+      .center-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .btn-custom {
+        padding: 1rem 2rem;
+        font-size: 1.5rem;
+        width: 100%;  /* Ensures buttons are the same size */
+      }
+      .logout-button {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+      }
+      .username {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        font-size: 1.25rem;
+        color: black;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body class="d-flex h-100 text-center text-white bg-white">
+    <div class="container d-flex w-100 h-100 p-3 mx-auto flex-column center-content">
+      <!-- Hello <username> -->
+      <div class="username">𝑯𝒆𝒍𝒍𝒐 <span id="username"><%= name %></span></div>
+
+      <!-- Logout Button -->
+      <form action="/logout?_method=DELETE" method="POST" class="logout-button">
+        <button class="btn btn-dark text-white" type="submit">𝑳𝒐𝒈𝒐𝒖𝒕</button>
+      </form>
+
+      <main>
+        <h1 class="text-dark mb-4">𝑾𝒆𝒍𝒄𝒐𝒎𝒆</h1>
+        <p>
+          <!-- Create Notes Button with GET method -->
+          <button 
+            class="btn btn-lg btn-secondary fw-bold text-dark border-white bg-white btn-custom" 
+            onclick="redirectToUpload()"
+          >
+          𝘾𝙧𝙚𝙖𝙩𝙚 𝙉𝙤𝙩𝙚𝙨
+          </button>
+        </p>
+        <p>
+           <!-- Uploaded Notes Button with GET method -->
+           <button 
+           class="btn btn-lg btn-secondary fw-bold text-dark border-white bg-white btn-custom" 
+           onclick="redirectToUploadNotes()"
+         >
+         𝙐𝙥𝙡𝙤𝙖𝙙𝙚𝙙 𝙉𝙤𝙩𝙚𝙨
+         </button>
+        </p>
+      </main>
+    </div>
+
+    <script>
+      // JavaScript function to redirect to the /upload route with POST method
+      function redirectToUpload() {
+        // Get the username from the page
+        const name = document.getElementById('username').textContent;
+
+        // Create a form to send data via POST request
+        const form = document.createElement('form');
+        form.method = 'GET';
+        form.action = '/record';
+
+        // Create a hidden input to store the name
+        const nameInput = document.createElement('input');
+        nameInput.type = 'hidden';
+        nameInput.name = 'name'; // This is the key the server will use
+        nameInput.value = name; // The value is the username displayed on the page
+
+        // Append the hidden input to the form
+        form.appendChild(nameInput);
+
+        // Append the form to the body (invisibly)
+        document.body.appendChild(form);
+
+        // Submit the form
+        form.submit();
+      }
+
+      function redirectToUploadNotes() {
+        // Get the username from the page
+        const name = document.getElementById('username').textContent;
+
+        // Create a form to send data via POST request
+        const form = document.createElement('form');
+        form.method = 'GET';
+        form.action = '/uploadnote';
+
+        // Create a hidden input to store the name
+        const nameInput = document.createElement('input');
+        nameInput.type = 'hidden';
+        nameInput.name = 'name'; // This is the key the server will use
+        nameInput.value = name; // The value is the username displayed on the page
+
+        // Append the hidden input to the form
+        form.appendChild(nameInput);
+
+        // Append the form to the body (invisibly)
+        document.body.appendChild(form);
+
+        // Submit the form
+        form.submit();
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>

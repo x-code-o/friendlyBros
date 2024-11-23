@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <style>
+        /* Add red border and error message for invalid inputs */
+        input:invalid {
+            border-color: red;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.875rem;
+            margin-top: 5px;
+            display: none; /* Hidden by default */
+        }
+
+        .form-outline {
+            position: relative;
+        }
+
+        /* Remove red border for invalid inputs */
+        input:invalid {
+            border-color: initial; /* Default browser style */
+        }
+
+        /* Show error message below input */
+        .form-outline input:invalid + .error-message {
+            display: block;
+        }
+
+        /* Hide error message when input is valid */
+        .form-outline input:valid + .error-message {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0 m-0" style="min-height: 100vh; height: 100vh; overflow: hidden;">
+        <section class="background-image overflow-hidden" style="min-height: 100vh; height: 100vh;">
+            <style>
+                .background-image {
+                    background-image: url('https://res.cloudinary.com/dsjt220g8/image/upload/v1731401434/background_ifhe9w.png');
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-attachment: fixed;
+                    min-height: 100vh;
+                    height: 100%;
+                    width: 100%;
+                }
+
+                .bg-glass {
+                    background-color: hsla(0, 0%, 100%, 0.328) !important;
+                    backdrop-filter: saturate(200%) blur(25px);
+                }
+
+                /* New style for increasing the size, italicizing, and adding a border around 'Friendly Notes' */
+                .header-text {
+                    font-size: 5rem; /* Increased font size */
+                    font-weight: bold; /* Make the text bold */
+                    color: hsl(218, 81%, 95%); /* Original color */
+                    font-style: italic; /* Make the text italic */
+                }
+            </style>
+
+            <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+                <div class="row gx-lg-5 align-items-center mb-5">
+                    <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+                        <!-- Apply the new class 'header-text' to the h1 element -->
+                        <h1 class="my-5 display-5 fw-bold ls-tight header-text">
+                            Friendly <br />
+                            <span style="color: hsl(218, 81%, 95%)">Notes</span>
+                        </h1>
+                    </div>
+
+                    <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+                        <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+                        <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+                        <div class="card bg-glass">
+                            <div class="card-body px-4 py-5 px-md-5">
+                                <form action="/register" method="POST">
+                                    <h1 class="mb-3 h3">Register</h1>
+
+                                    <!-- Flash message for errors -->
+                                    <% if (messages && messages.error) { %>
+                                        <div class="alert alert-danger" id="flash-message">
+                                            <%= messages.error %>
+                                        </div>
+                                    <% } %>
+
+                                    <!-- Username (Previously Full Name) -->
+                                    <div class="col-md-12 mb-4 form-outline">
+                                        <input type="text" name="username" id="username" class="form-control" required minlength="5" maxlength="5" />
+                                        <label class="form-label" for="username">Username</label>
+                                        <div class="error-message" id="username-error">Username must be exactly 5 characters.</div>
+                                    </div>
+
+                                    <!-- Email input with pattern restriction -->
+                                    <div class="form-outline mb-4">
+                                        <input type="email" name="email" id="email" class="form-control" required pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$" />
+                                        <label class="form-label" for="email">Email</label>
+                                        <div class="error-message" id="email-error">Email must be valid.</div>
+                                    </div>
+
+                                    <!-- Password input with minlength and maxlength -->
+                                    <div class="form-outline mb-4">
+                                        <input type="password" name="password" id="password" class="form-control" required minlength="8" maxlength="8" />
+                                        <label class="form-label" for="password">Password</label>
+                                        <div class="error-message" id="password-error">Password must be exactly 8 characters.</div>
+                                    </div>
+
+                                    <!-- Submit button -->
+                                    <button type="submit" class="btn btn-primary btn-block mb-4">Sign up</button>
+
+                                    <div class="text-center">
+                                        <p>Already have an account? <a href="/login">Login</a></p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+
+    <script>
+        // Add event listeners to inputs to validate on typing
+        const usernameInput = document.getElementById('username');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        // Add 'input' event listeners to each input field
+        usernameInput.addEventListener('input', function() {
+            validateInput(usernameInput, document.getElementById('username-error'));
+        });
+
+        emailInput.addEventListener('input', function() {
+            validateInput(emailInput, document.getElementById('email-error'));
+        });
+
+        passwordInput.addEventListener('input', function() {
+            validateInput(passwordInput, document.getElementById('password-error'));
+        });
+
+        // Function to check validity and show/hide error messages
+        function validateInput(inputElement, errorElement) {
+            if (inputElement.validity.valid) {
+                // If input is valid, remove red border and hide error message
+                inputElement.style.borderColor = '';
+                errorElement.style.display = 'none';
+            } else {
+                // If input is invalid, add red border and show error message
+                inputElement.style.borderColor = 'red';
+                errorElement.style.display = 'block';
+            }
+        }
+
+        // Remove flash message after 5 seconds
+        const flashMessage = document.getElementById('flash-message');
+        if (flashMessage) {
+            setTimeout(() => {
+                flashMessage.style.display = 'none';
+            }, 3000); // 5000ms = 5 seconds
+        }
+    </script>
+</body>
+</html>
