@@ -303,6 +303,11 @@
         class="btn btn-secondary mt-2"
       >
         Upload
+        <div id="uuploadSpinner" style="display: none; position: absolute; left: 50%; transform: translateX(-50%);">
+          <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Uploading...</span>
+          </div>
+        </div>
       </button>
     </div>
   </div>
@@ -310,6 +315,8 @@
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
+        const audioNameInput = document.getElementById("audio-name");
+        audioNameInput.value = '';
   // Logic for setting and displaying the username
   const name = "<%= name %>";
   if (name && name !== "guest") {
@@ -532,7 +539,9 @@ document.getElementById("save-audio").addEventListener('click', () => {
   fetchRecordedFiles();
 
   // Handle Upload Button Click
-  uploadButton.addEventListener('click', async () => {
+  document.getElementById("upload-audio-button").addEventListener('click', async () => {
+    const loadSpinner = document.getElementById("uuploadSpinner");
+    loadSpinner.style.display = "inline-block"; 
     const selectedLocalFile = audioFileInput.files[0];
     const selectedFirebaseFile = firebaseSelect.value;
 
@@ -549,7 +558,7 @@ document.getElementById("save-audio").addEventListener('click', () => {
     if (localOption.checked) {
       // Upload local file to Firebase and get the URL
       const firebaseUrl = await uploadFileToFirebase(selectedLocalFile);
-      formData.append('audioUrl', firebaseUrl); // Send Firebase URL to the backend
+      formData.append('audioUrl', firebaseUrl); 
     } else if (firebaseOption.checked) {
       // Use the selected Firebase file URL
       formData.append('audioUrl', selectedFirebaseFile);
@@ -561,6 +570,7 @@ formData.forEach((value, key) => {
   urlParams.append(key, value);
 });
 
+loadSpinner.style.display = "none";
 // Redirect to the /upload route with the URL parameters
 window.location.href = `/upload?${urlParams.toString()}`;
 
@@ -596,6 +606,8 @@ const uploadFileToFirebase = async (file) => {
     alert("Failed to upload audio.");
     return null;  // Return null if there was an error
   }
+  
+  
 };
 
 

@@ -459,79 +459,330 @@ const mediapage = asyncHandler(async (req, res) => {
         }
 
         // Predefined URLs for mood-based audio
-        const sadUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fsad-emotional-and-dramatic-piano-237661.mp3?alt=media&token=0aeea0ab-beab-4d12-95ae-c1e180d10e4e`;
-        const happyUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fhappy-mood-126767.mp3?alt=media&token=393cc16f-953e-47e1-9ed0-c59dc88d448b`;
-        const birthUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fbirthday-wishes-happy-cheerful-positive-music-262452.mp3?alt=media&token=09f2949c-6008-4f8d-bede-a7034f7b7f4c`;
+        const oneUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2FMain%20agar%20kahoon.mp3?alt=media&token=7b5fff8d-8cca-4702-8c14-d62d85c1c25b`;
+        const twoUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2FTera%20yaar%20hoon%20mai.mp3?alt=media&token=be61d93b-14f4-4d51-a909-101cfa2b5a20`;
+        const threeUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2FTere%20jaisa%20yaar%20kaha.mp3?alt=media&token=f6f745fb-b40a-4f19-8ba2-487fd5d28f80`;
+        const fourUrl =`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2FTu%20hai%20toh.mp3?alt=media&token=658a6e88-d3fc-403e-9672-fb967c3a1fed`;
+        const fiveUrl=`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2FTu%20hi%20yaar%20mera.mp3?alt=media&token=a51ae28b-6462-4f01-bf9d-1e8069ceec05`;
+        const sixUrl=`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fold%20song%20mashup.mp3?alt=media&token=f751cf76-11af-4cf7-a587-8fa987da5834`;
+        const sevenUrl=`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fthousand%20years.mp3?alt=media&token=614aed54-0b1f-49ee-b9b9-0744dd18bc37`;
+        const eightUrl=`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Ftumse%20mil%20ke.mp3?alt=media&token=c6f6389c-4c8a-42a8-8b3c-3f5bddf03e90`;
+        const nineUrl=`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fzara%20zara.mp3?alt=media&token=5f312d51-48bb-437a-8938-e4718f44c404`;
         
         let hiddenAudioUrl;
         // Determine the hidden audio URL based on mood
-        if(media.mood === "A"){
-            hiddenAudioUrl =  happyUrl;
-        }else if(media.mood === "B"){
-            hiddenAudioUrl =  sadUrl;
-        }else{
-            hiddenAudioUrl =  birthUrl;
+        if (media.mood === "A") {
+            hiddenAudioUrl = oneUrl;
+        } else if (media.mood === "B") {
+            hiddenAudioUrl = twoUrl;
+        } else if (media.mood === "C") {
+            hiddenAudioUrl = threeUrl;
+        } else if (media.mood === "D") {
+            hiddenAudioUrl = fourUrl;
+        } else if (media.mood === "E") {
+            hiddenAudioUrl = fiveUrl;
+        } else if (media.mood === "F") {
+            hiddenAudioUrl = sixUrl;
+        } else if (media.mood === "G") {
+            hiddenAudioUrl = sevenUrl;
+        } else if (media.mood === "H") {
+            hiddenAudioUrl = eightUrl;
+        } else {
+            hiddenAudioUrl = nineUrl;
         }
-        // Volume for hidden audio is set to 25% (managed entirely by the browser)
-        const volume = 0.2; // Backend-controlled volume
-
+        
         // Render the page
         res.send(`
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>${media.filename}</title>
-                <style>
-                    body { text-align: center; padding: 20px; }
-                    h1 { margin-bottom: 20px; }
-                </style>
-                <script>
-                    document.addEventListener('DOMContentLoaded', () => {
-                        const primaryAudio = document.getElementById('primaryAudio');
-                        const hiddenAudio = document.getElementById('hiddenAudio');
+          <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${media.filename}</title>
+    <style>
+        body {
+            text-align: center;
+            padding: 20px;
+            background-image: url('https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fpaper-texture.jpg?alt=media&token=d8ce80c0-78e9-4208-b7fc-ca694876de7d'); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center;
+            color: white; /* Optional: makes text visible on a potentially dark background */
+        }
 
-                        // Set initial volume for hidden audio
-                        hiddenAudio.volume = ${volume};
+        h1, p {
+            font-weight: bold;
+            font-style: italic;
+        }
 
-                        // Synchronize play and pause between the two audio elements
-                        primaryAudio.addEventListener('play', () => {
-                            hiddenAudio.currentTime = 0; // Reset hidden audio
-                            hiddenAudio.play();
-                        });
+        #loadingIndicator {
+            font-weight: bold;
+            font-style: italic;
+        }
 
-                        primaryAudio.addEventListener('pause', () => {
-                            hiddenAudio.pause();
-                        });
+        #mediaPreview {
+            font-weight: bold;
+            font-style: italic;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const primaryAudio = document.getElementById('primaryAudio');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const mediaPreview = document.getElementById('mediaPreview');
+            const audioPreview = document.getElementById('audioPreview');
+            const audioUrl = "${media.fileUrl}";
+            const hiddenAudioUrl = "${hiddenAudioUrl}"; // Dynamically set based on mood
+            
+            try {
+                // Request to fetch both the main audio and the mood audio
+                const [audioResponse, moodResponse] = await Promise.all([
+                    fetch(audioUrl),
+                    fetch(hiddenAudioUrl),
+                ]);
 
-                        // Synchronize playback duration
-                        primaryAudio.addEventListener('timeupdate', () => {
-                            // Restart hidden audio if it's shorter
-                            if (primaryAudio.currentTime > hiddenAudio.duration) {
-                                hiddenAudio.currentTime = 0;
-                                hiddenAudio.play();
-                            }
+                if (!audioResponse.ok || !moodResponse.ok) {
+                    throw new Error("Failed to fetch audio files.");
+                }
 
-                            // Stop hidden audio if primary audio ends
-                            if (primaryAudio.currentTime >= primaryAudio.duration) {
-                                hiddenAudio.pause();
-                            }
-                        });
-                    });
-                </script>
-            </head>
-            <body>
-                <h1>${media.uploadedBy || 'Friend'}’s Message for You</h1>
-                <p>${media.message || "Enjoy this media!"}</p>
+                const [audioBlob, moodBlob] = await Promise.all([
+                    audioResponse.blob(),
+                    moodResponse.blob(),
+                ]);
 
-                <!-- Visible audio element -->
-                <audio controls src="${media.fileUrl}" id="primaryAudio" style="max-width: 100%;"></audio>
+                const [audioArrayBuffer, moodArrayBuffer] = await Promise.all([
+                    audioBlob.arrayBuffer(),
+                    moodBlob.arrayBuffer(),
+                ]);
 
-                <!-- Hidden audio element -->
-                <audio src="${hiddenAudioUrl}" id="hiddenAudio" style="display: none;"></audio>
-            </body>
-            </html>
+                // Decode the audio files into audio buffers
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const [audioBuffer, moodBuffer] = await Promise.all([
+                    audioContext.decodeAudioData(audioArrayBuffer),
+                    audioContext.decodeAudioData(moodArrayBuffer),
+                ]);
+
+                // Create two audio buffers and set their playback rates
+                const audioSource = audioContext.createBufferSource();
+                const moodSource = audioContext.createBufferSource();
+
+                audioSource.buffer = audioBuffer;
+                moodSource.buffer = moodBuffer;
+
+                // Create gain nodes for volume control
+                const audioGainNode = audioContext.createGain();
+                const moodGainNode = audioContext.createGain();
+
+                audioGainNode.gain.value = 1.0; // 100% volume for main audio
+                moodGainNode.gain.value = 0.15; // 15% volume for mood audio
+                
+                // Connect the sources to the gain nodes and the context destination
+                audioSource.connect(audioGainNode);
+                moodSource.connect(moodGainNode);
+
+                audioGainNode.connect(audioContext.destination);
+                moodGainNode.connect(audioContext.destination);
+
+                // Check if main audio is longer than mood audio
+                if (audioBuffer.duration > moodBuffer.duration) {
+                    // Initialize OfflineAudioContext before creating sources
+                    const offlineContext = new OfflineAudioContext(2, audioBuffer.sampleRate * audioBuffer.duration, audioBuffer.sampleRate);
+
+                    // Loop the mood audio until its length matches the main audio
+                    const loopedMoodBuffer = await loopAudio(moodBuffer, audioBuffer.duration);
+
+                    // Create and configure offline sources
+                    const offlineAudioSource = offlineContext.createBufferSource();
+                    const offlineMoodSource = offlineContext.createBufferSource();
+                    
+                    offlineAudioSource.buffer = audioBuffer;
+                    offlineMoodSource.buffer = loopedMoodBuffer;
+
+                    // Create gain nodes for volume control
+                    const offlineAudioGainNode = offlineContext.createGain();
+                    const offlineMoodGainNode = offlineContext.createGain();
+
+                    offlineAudioGainNode.gain.value = 1.0; // Full volume for main audio
+                    offlineMoodGainNode.gain.value = 0.15; // Reduced volume for mood audio
+
+                    // Connect sources to gain nodes
+                    offlineAudioSource.connect(offlineAudioGainNode);
+                    offlineMoodSource.connect(offlineMoodGainNode);
+
+                    // Connect gain nodes to the offline context destination
+                    offlineAudioGainNode.connect(offlineContext.destination);
+                    offlineMoodGainNode.connect(offlineContext.destination);
+
+                    // Start offline sources for rendering
+                    offlineAudioSource.start();
+                    offlineMoodSource.start();
+
+                    // Render the mixed audio in the offline context
+                    const mixedAudioBuffer = await offlineContext.startRendering();
+
+                    // Convert the mixed audio buffer into a blob
+                    const mixedAudioBlob = await bufferToWave(mixedAudioBuffer);
+                    const mixedAudioUrl = URL.createObjectURL(mixedAudioBlob);
+
+                    // Set the mixed audio URL to the audio preview element
+                    audioPreview.src = mixedAudioUrl;
+                    audioPreview.pause(); // Explicitly pause the audio to ensure it doesn't play automatically
+                    audioPreview.currentTime = 0;
+
+                    // Update UI
+                    loadingIndicator.style.display = "none"; // Hide loading indicator
+                    mediaPreview.style.display = "block"; // Show the audio preview
+                } else {
+                    const NewContext = new OfflineAudioContext(2, audioBuffer.sampleRate * audioBuffer.duration, audioBuffer.sampleRate);
+          
+                    // Create and configure offline sources
+                    const NewAudioSource = NewContext.createBufferSource();
+                    const NewMoodSource = NewContext.createBufferSource();
+                    
+                    NewAudioSource.buffer = audioBuffer;
+                    NewMoodSource.buffer = moodBuffer;
+
+                    // Create gain nodes for volume control
+                    const NewAudioGainNode = NewContext.createGain();
+                    const NewMoodGainNode = NewContext.createGain();
+
+                    NewAudioGainNode.gain.value = 1.0; // Full volume for main audio
+                    NewMoodGainNode.gain.value = 0.15; // Reduced volume for mood audio
+
+                    // Connect sources to gain nodes
+                    NewAudioSource.connect(NewAudioGainNode);
+                    NewMoodSource.connect(NewMoodGainNode);
+
+                    // Connect gain nodes to the offline context destination
+                    NewAudioGainNode.connect(NewContext.destination);
+                    NewMoodGainNode.connect(NewContext.destination);
+
+                    // Start offline sources for rendering
+                    NewAudioSource.start();
+                    NewMoodSource.start();
+
+                    const mixededAudioBuffer = await NewContext.startRendering();
+                    // Use previous mixing logic for shorter or equal length
+                    const mixedAudioBlob = await bufferToWave(mixededAudioBuffer);
+                    const mixedAudioUrl = URL.createObjectURL(mixedAudioBlob);
+
+                    audioPreview.src = mixedAudioUrl;
+                    audioPreview.pause(); // Explicitly pause the audio to ensure it doesn't play automatically
+                    audioPreview.currentTime = 0;
+                    loadingIndicator.style.display = "none"; // Hide loading indicator
+                    mediaPreview.style.display = "block"; // Show the audio preview
+                }
+            } catch (error) {
+                console.error("Error mixing audio:", error);
+                alert("Error mixing audio. Please try again.");
+            }
+        });
+
+        async function loopAudio(moodBuffer, targetDuration) {
+            const loopedBuffer = audioContext.createBuffer(
+                moodBuffer.numberOfChannels,
+                moodBuffer.length * Math.ceil(targetDuration / moodBuffer.duration),
+                moodBuffer.sampleRate
+            );
+
+            for (let i = 0; i < loopedBuffer.numberOfChannels; i++) {
+                const channelData = loopedBuffer.getChannelData(i);
+                for (let j = 0; j < channelData.length; j++) {
+                    channelData[j] = moodBuffer.getChannelData(i)[j % moodBuffer.length];
+                }
+            }
+            return loopedBuffer;
+        }
+
+        // Convert AudioBuffer to a WAV blob for playback
+        function bufferToWave(buffer) {
+            const waveHeader = new ArrayBuffer(44);
+            const view = new DataView(waveHeader);
+            let offset = 0;
+            
+            const numChannels = buffer.numberOfChannels;
+            const sampleRate = buffer.sampleRate;
+            const numFrames = buffer.length;
+            const bitsPerSample = 16;
+
+            const byteRate = sampleRate * numChannels * bitsPerSample / 8;
+            const blockAlign = numChannels * bitsPerSample / 8;
+            const dataSize = numFrames * numChannels * bitsPerSample / 8;
+
+            // RIFF header
+            writeString(view, offset, 'RIFF');
+            offset += 4;
+            view.setUint32(offset, 36 + dataSize, true);
+            offset += 4;
+            writeString(view, offset, 'WAVE');
+            offset += 4;
+
+            // fmt chunk
+            writeString(view, offset, 'fmt ');
+            offset += 4;
+            view.setUint32(offset, 16, true);
+            offset += 4;
+            view.setUint16(offset, 1, true); // PCM format
+            offset += 2;
+            view.setUint16(offset, numChannels, true);
+            offset += 2;
+            view.setUint32(offset, sampleRate, true);
+            offset += 4;
+            view.setUint32(offset, byteRate, true);
+            offset += 4;
+            view.setUint16(offset, blockAlign, true);
+            offset += 2;
+            view.setUint16(offset, bitsPerSample, true);
+            offset += 2;
+
+            // data chunk
+            writeString(view, offset, 'data');
+            offset += 4;
+            view.setUint32(offset, dataSize, true);
+            offset += 4;
+
+            // Write the audio data
+            const bufferData = buffer.getChannelData(0);
+            const audioData = new Int16Array(numFrames * numChannels);
+            for (let i = 0; i < numFrames; i++) {
+                audioData[i * 2] = bufferData[i] * 0x7FFF; // Left channel
+                audioData[i * 2 + 1] = bufferData[i] * 0x7FFF; // Right channel
+            } 
+            // Write the data to the array buffer
+            const audioBuffer = new ArrayBuffer(dataSize);
+            const audioView = new DataView(audioBuffer);
+            for (let i = 0; i < audioData.length; i++) {
+                audioView.setInt16(i * 2, audioData[i], true);
+            }
+
+            const mixedBlob = new Blob([waveHeader, audioBuffer], { type: 'audio/wav' });
+            return mixedBlob;
+        }
+
+        // Helper function to write strings into a DataView
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <h1>${media.uploadedBy || 'Friend'}’s Message for You</h1>
+    <p>${media.message || "Enjoy this media!"}</p>
+
+    <!-- Audio preview element for the final mixed audio -->
+    <audio controls id="audioPreview" style="max-width: 100%;"></audio>
+    
+    <!-- Loading indicator and media preview (hidden by default) -->
+    <div id="loadingIndicator" style="display: block;">Loading...</div>
+    <div id="mediaPreview" style="display: none;">
+        <!-- Here the audio will be shown -->
+    </div>
+</body>
+</html>
+
+
         `);
     } catch (error) {
         console.error("Error fetching media:", error);

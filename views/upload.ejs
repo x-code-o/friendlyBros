@@ -107,9 +107,15 @@
         <textarea id="message" placeholder="Message"></textarea>
         <select id="mood" class="form-control mb-3">
           <option value="" disabled selected>Select BGM</option>
-          <option value="A">happy-mood.mp3</option>
-          <option value="B">sad-emotional-and-dramatic.mp3</option>
-          <option value="C">birthday-wishes.mp3</option>
+          <option value="A">Main agar kahoon.mp3</option>
+          <option value="B">Tera yaar hoon mai.mp3</option>
+          <option value="C">Tere jaisa yaar kaha.mp3</option>
+          <option value="D">Tu hai toh.mp3</option>
+          <option value="E">Tu hi yaar mera.mp3</option>
+          <option value="F">Old song mashup.mp3</option>
+          <option value="G">thousand years.mp3</option>
+          <option value="H">Tumse mil ke.mp3</option>
+          <option value="I">Zara Zara.mp3</option>
         </select>
         <div id="loading" style="display:none;  
       color: rgb(3, 3, 3); 
@@ -136,7 +142,8 @@
         </button>
         
         <div id="qrCanvas" class="mt-4" style="display:none;"></div>
-        <button id="createImageButton" style="display:none;" class="mt-2">Create Image</button>
+        <button id="downloadButton" style="display:none;" class="mt-2">Download QR</button>
+        <button id="doneButton" style="display:none;" class="mt-2">Done</button>
     </div>
   </div>
 
@@ -157,40 +164,47 @@
   const mediaPreview = document.getElementById("mediaPreview");
   const audioPreview = document.getElementById("audioPreview");
 
-  let bgmAudio = null;
   let audioContext = new (window.AudioContext || window.webkitAudioContext)();
   moodSelect.selectedIndex = 0;
   moodSelect.addEventListener("change", async (event) => {
     const loadingIndicator = document.getElementById("loading");
     loadingIndicator.style.display = "block"; // Show loading indicator
-    // Clear previous audio preview if any
-    const audioPreview = document.getElementById("audioPreview");
-    const mediaPreview = document.getElementById("mediaPreview");
-  
   // Hide the old audio preview and clear the src
   audioPreview.src = '';
   mediaPreview.style.display = 'none'; // Hide the previous preview
 
     const selectedMood = event.target.value;
     let moodAudioUrl = ` `;
-    // Clear any previously playing BGM
-    if (bgmAudio) {
-      bgmAudio.pause();
-      bgmAudio = null;
-    }
 
-        const sadUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fsad-emotional-and-dramatic-piano-237661.mp3?alt=media&token=0aeea0ab-beab-4d12-95ae-c1e180d10e4e`;
-        const happyUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fhappy-mood-126767.mp3?alt=media&token=393cc16f-953e-47e1-9ed0-c59dc88d448b`;
-        const birthUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fbirthday-wishes-happy-cheerful-positive-music-262452.mp3?alt=media&token=09f2949c-6008-4f8d-bede-a7034f7b7f4c`;
-        
+        const oneUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2FMain%20agar%20kahoon.mp3?alt=media&token=7b5fff8d-8cca-4702-8c14-d62d85c1c25b`;
+        const twoUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2FTera%20yaar%20hoon%20mai.mp3?alt=media&token=be61d93b-14f4-4d51-a909-101cfa2b5a20`;
+        const threeUrl = `https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2FTere%20jaisa%20yaar%20kaha.mp3?alt=media&token=f6f745fb-b40a-4f19-8ba2-487fd5d28f80`;
+        const fourUrl =`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2FTu%20hai%20toh.mp3?alt=media&token=658a6e88-d3fc-403e-9672-fb967c3a1fed`;
+        const fiveUrl=`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2FTu%20hi%20yaar%20mera.mp3?alt=media&token=a51ae28b-6462-4f01-bf9d-1e8069ceec05`;
+        const sixUrl=`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fold%20song%20mashup.mp3?alt=media&token=f751cf76-11af-4cf7-a587-8fa987da5834`;
+        const sevenUrl=`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fthousand%20years.mp3?alt=media&token=614aed54-0b1f-49ee-b9b9-0744dd18bc37`;
+        const eightUrl=`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Ftumse%20mil%20ke.mp3?alt=media&token=c6f6389c-4c8a-42a8-8b3c-3f5bddf03e90`;
+        const nineUrl=`https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fzara%20zara.mp3?alt=media&token=5f312d51-48bb-437a-8938-e4718f44c404`;
         let hiddenAudioUrl;
         // Determine the hidden audio URL based on mood
         if(selectedMood === "A"){
-            hiddenAudioUrl =  happyUrl;
+            hiddenAudioUrl =  oneUrl;
         }else if(selectedMood === "B"){
-            hiddenAudioUrl =  sadUrl;
+            hiddenAudioUrl =  twoUrl;
+        }else if(selectedMood === "C"){
+            hiddenAudioUrl =  threeUrl;
+        }else if(selectedMood === "D"){
+            hiddenAudioUrl =  fourUrl;
+        }else if(selectedMood === "E"){
+            hiddenAudioUrl =  fiveUrl;
+        }else if(selectedMood === "F"){
+            hiddenAudioUrl =  sixUrl;
+        }else if(selectedMood === "G"){
+            hiddenAudioUrl =  sevenUrl;
+        }else if(selectedMood === "H"){
+            hiddenAudioUrl =  eightUrl;
         }else{
-            hiddenAudioUrl =  birthUrl;
+            hiddenAudioUrl =  nineUrl;
         }
 
     if (selectedMood) {
@@ -204,7 +218,7 @@
       console.log(hiddenAudioUrl);
 
       try {
-        // Request to mix the audio
+        // Request to fetch both the main audio and the mood audio
         const [audioResponse, moodResponse] = await Promise.all([
           fetch(audioUrl),
           fetch(hiddenAudioUrl),
@@ -233,61 +247,114 @@
         // Create two audio buffers and set their playback rates
         const audioSource = audioContext.createBufferSource();
         const moodSource = audioContext.createBufferSource();
-        
+
         audioSource.buffer = audioBuffer;
         moodSource.buffer = moodBuffer;
-        
+
         // Create gain nodes for volume control
         const audioGainNode = audioContext.createGain();
         const moodGainNode = audioContext.createGain();
-        
-        audioGainNode.gain.value = 1.0; // 100% volume for main audio
-        moodGainNode.gain.value = 0.2; // 20% volume for mood audio
 
+        audioGainNode.gain.value = 1.0; // 100% volume for main audio
+        moodGainNode.gain.value = 0.15; // 20% volume for mood audio
         // Connect the sources to the gain nodes and the context destination
         audioSource.connect(audioGainNode);
         moodSource.connect(moodGainNode);
         
+
         audioGainNode.connect(audioContext.destination);
         moodGainNode.connect(audioContext.destination);
 
-        // Create an offline audio context to capture the mixed audio
-        const offlineContext = new OfflineAudioContext(2, audioBuffer.length, audioContext.sampleRate);
+        // Check if main audio is longer than mood audio
+        if (audioBuffer.duration > moodBuffer.duration) {
+    // Initialize OfflineAudioContext before creating sources
+    const offlineContext = new OfflineAudioContext(2, audioBuffer.sampleRate * audioBuffer.duration, audioBuffer.sampleRate);
 
-        // Connect both sources to the offline context
-        const offlineAudioSource = offlineContext.createBufferSource();
-        const offlineMoodSource = offlineContext.createBufferSource();
-        
-        offlineAudioSource.buffer = audioBuffer;
-        offlineMoodSource.buffer = moodBuffer;
-        
-        const offlineAudioGainNode = offlineContext.createGain();
-        const offlineMoodGainNode = offlineContext.createGain();
-        
-        offlineAudioGainNode.gain.value = 1.0; // Main audio at full volume
-        offlineMoodGainNode.gain.value = 0.08; // Mood audio at reduced volume
-        
-        offlineAudioSource.connect(offlineAudioGainNode);
-        offlineMoodSource.connect(offlineMoodGainNode);
-        
-        offlineAudioGainNode.connect(offlineContext.destination);
-        offlineMoodGainNode.connect(offlineContext.destination);
+    // Loop the mood audio until its length matches the main audio
+    const loopedMoodBuffer = await loopAudio(moodBuffer, audioBuffer.duration);
+    
+    // Create and configure offline sources
+    const offlineAudioSource = offlineContext.createBufferSource();
+    const offlineMoodSource = offlineContext.createBufferSource();
+    
+    offlineAudioSource.buffer = audioBuffer;
+    offlineMoodSource.buffer = loopedMoodBuffer;
 
-        // Start mixing the audio
-        offlineAudioSource.start();
-        offlineMoodSource.start();
+    // Create gain nodes for volume control
+    const offlineAudioGainNode = offlineContext.createGain();
+    const offlineMoodGainNode = offlineContext.createGain();
 
-        // Render the mixed audio into the offline context (this is what we're looking for)
-        const mixedAudioBuffer = await offlineContext.startRendering();
+    offlineAudioGainNode.gain.value = 1.0; // Full volume for main audio
+    offlineMoodGainNode.gain.value = 0.15; // Reduced volume for mood audio
 
-        // Convert the mixed audio buffer into a blob
-        const mixedAudioBlob = await bufferToWave(mixedAudioBuffer);
-        const mixedAudioUrl = URL.createObjectURL(mixedAudioBlob);
+    // Connect sources to gain nodes
+    offlineAudioSource.connect(offlineAudioGainNode);
+    offlineMoodSource.connect(offlineMoodGainNode);
 
-        // Set the new mixed audio URL to the audio preview element
-        audioPreview.src = mixedAudioUrl;
-        loadingIndicator.style.display = "none"; 
-        mediaPreview.style.display = "block"; // Show the audio preview
+    // Connect gain nodes to the offline context destination
+    offlineAudioGainNode.connect(offlineContext.destination);
+    offlineMoodGainNode.connect(offlineContext.destination);
+
+    // Start offline sources for rendering
+    offlineAudioSource.start();
+    offlineMoodSource.start();
+
+    // Render the mixed audio in the offline context
+    const mixedAudioBuffer = await offlineContext.startRendering();
+
+    // Convert the mixed audio buffer into a blob
+    const mixedAudioBlob = await bufferToWave(mixedAudioBuffer);
+    const mixedAudioUrl = URL.createObjectURL(mixedAudioBlob);
+
+    // Set the mixed audio URL to the audio preview element
+    audioPreview.src = mixedAudioUrl;
+    audioPreview.pause(); // Explicitly pause the audio to ensure it doesn't play automatically
+    audioPreview.currentTime = 0;
+
+    // Update UI
+    loadingIndicator.style.display = "none"; // Hide loading indicator
+    mediaPreview.style.display = "block"; // Show the audio preview
+
+        } else {
+          const NewContext = new OfflineAudioContext(2, audioBuffer.sampleRate * audioBuffer.duration, audioBuffer.sampleRate);
+          
+          // Create and configure offline sources
+    const NewAudioSource = NewContext.createBufferSource();
+    const NewMoodSource = NewContext.createBufferSource();
+    
+    NewAudioSource.buffer = audioBuffer;
+    NewMoodSource.buffer = moodBuffer;
+
+    // Create gain nodes for volume control
+    const NewAudioGainNode = NewContext.createGain();
+    const NewMoodGainNode = NewContext.createGain();
+
+    NewAudioGainNode.gain.value = 1.0; // Full volume for main audio
+    NewMoodGainNode.gain.value = 0.15; // Reduced volume for mood audio
+
+    // Connect sources to gain nodes
+    NewAudioSource.connect(NewAudioGainNode);
+    NewMoodSource.connect(NewMoodGainNode);
+
+    // Connect gain nodes to the offline context destination
+    NewAudioGainNode.connect(NewContext.destination);
+    NewMoodGainNode.connect(NewContext.destination);
+
+    // Start offline sources for rendering
+    NewAudioSource.start();
+    NewMoodSource.start();
+
+          const mixededAudioBuffer = await NewContext.startRendering();
+          // Use previous mixing logic for shorter or equal length
+          const mixedAudioBlob = await bufferToWave(mixededAudioBuffer);
+          const mixedAudioUrl = URL.createObjectURL(mixedAudioBlob);
+
+          audioPreview.src = mixedAudioUrl;
+          audioPreview.pause(); // Explicitly pause the audio to ensure it doesn't play automatically
+          audioPreview.currentTime = 0;
+          loadingIndicator.style.display = "none"; // Hide loading indicator
+          mediaPreview.style.display = "block"; // Show the audio preview
+        }
 
       } catch (error) {
         console.error("Error mixing audio:", error);
@@ -299,6 +366,22 @@
       audioPreview.src = "";
     }
   });
+
+  async function loopAudio(moodBuffer, targetDuration) {
+    const loopedBuffer = audioContext.createBuffer(
+      moodBuffer.numberOfChannels,
+      moodBuffer.length * Math.ceil(targetDuration / moodBuffer.duration),
+      moodBuffer.sampleRate
+    );
+
+    for (let i = 0; i < loopedBuffer.numberOfChannels; i++) {
+      const channelData = loopedBuffer.getChannelData(i);
+      for (let j = 0; j < channelData.length; j++) {
+        channelData[j] = moodBuffer.getChannelData(i)[j % moodBuffer.length];
+      }
+    }
+    return loopedBuffer;
+  }
 
   // Convert AudioBuffer to a WAV blob for playback
   function bufferToWave(buffer) {
@@ -372,8 +455,6 @@
     }
   }
 
-});
-
   // Ensure the audio plays when the play button is clicked
   audioPreview.addEventListener('play', () => {
     console.log('Audio is playing');
@@ -385,6 +466,13 @@
     console.log('Audio is paused');
     // You can add any logic you want to execute when the audio is paused
   });
+
+
+});
+
+
+
+
 
 
 document.getElementById('uploadButton').addEventListener('click', async () => {
@@ -436,14 +524,28 @@ document.getElementById('uploadButton').addEventListener('click', async () => {
       const qrCanvas = document.getElementById("qrCanvas");
       qrCanvas.innerHTML = `<img src="${data.qrCodeUrl}" alt="QR Code" style="width: 200px; height: 200px;" />`;
       qrCanvas.style.display = "block";
-      // Show Create Image Button
-      const createImageButton = document.getElementById('createImageButton');
-      createImageButton.style.display = "block";
+      // Show done Button
+      const DoneButton = document.getElementById('doneButton');
+      DoneButton.style.display = "block";
+      const downloadButton = document.getElementById('downloadButton');
+  downloadButton.style.display = "block";
 
       // Redirect to the image page on button click
-      createImageButton.addEventListener('click', () => {
-        window.location.href = '/imagepage'; // Redirect to /imagepage
+      DoneButton.addEventListener('click', () => {
+        window.location.href = `/record`; // Redirect to /imagepage
       });
+
+      document.getElementById('downloadButton').addEventListener('click', () => {
+     const qrImage = downloadFromFirebase(data.qrCodeUrl);
+  
+  if (qrImage) {
+    const link = document.createElement('a');
+    link.href = qrImage.src; // Set the image source as the download link
+    link.download = 'qr_code.png'; // Set the file name for download
+    link.click(); // Trigger the download
+  } else {
+  }
+});
 
       document.getElementById('uploadedBy').value = '';
       document.getElementById('message').value = '';
@@ -456,6 +558,36 @@ document.getElementById('uploadButton').addEventListener('click', async () => {
     alert("Error uploading file. Please try again.");
   }
 });
+
+
+function downloadFromFirebase(url) {
+  if (!url) {
+    alert('Invalid download URL.');
+    return;
+  }
+
+  const filename = url.substring(url.lastIndexOf("/") + 1).split("?")[0]; // Extract filename
+  const xhr = new XMLHttpRequest();
+  xhr.responseType = 'blob'; // Set response type to blob
+
+  xhr.onload = function () {
+    // Create a temporary link element for downloading the file
+    const a = document.createElement('a');
+    a.href = window.URL.createObjectURL(xhr.response);
+    a.download = filename; // Use the extracted filename
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click(); // Trigger the download
+    document.body.removeChild(a); // Remove the link after download
+  };
+
+  xhr.onerror = function () {
+    alert('Failed to download the file. Please try again.');
+  };
+
+  xhr.open('GET', url);
+  xhr.send();
+}
 
     </script>
 
