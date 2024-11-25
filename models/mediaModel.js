@@ -33,7 +33,7 @@ const mediaSchema = mongoose.Schema(
     },
     mood: {
       type: String,
-      enum: ["A", "B","C"], // Restrict values to "Happy" or "Sad"
+      enum: ["A", "B","C","D","E","F","G","H","I"], // Restrict values to "Happy" or "Sad"
       required: [true, "Mood is required"],
     },
   },
