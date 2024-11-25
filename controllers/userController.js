@@ -503,7 +503,7 @@ const mediapage = asyncHandler(async (req, res) => {
         body {
     text-align: center;
     padding: 20px;
-    background-image: url('https://res.cloudinary.com/dsjt220g8/image/upload/v1732521279/paper-texture_1_vjtlc6.jpg'); /* Replace with your image URL */
+    background-image: url('https://res.cloudinary.com/dsjt220g8/image/upload/v1732522085/finalload_wr1t68.jpg'); /* Replace with your image URL */
     background-size: cover; /* Ensures the image covers the entire screen */
     background-repeat: no-repeat; /* Prevents the image from repeating */
     background-position: center; /* Centers the image */
