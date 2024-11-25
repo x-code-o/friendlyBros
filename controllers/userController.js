@@ -501,28 +501,30 @@ const mediapage = asyncHandler(async (req, res) => {
     <title>${media.filename}</title>
     <style>
         body {
-            text-align: center;
-            padding: 20px;
-            background-image: url('https://firebasestorage.googleapis.com/v0/b/alumini8-3fd16.appspot.com/o/my-storage%2Fpaper-texture.jpg?alt=media&token=d8ce80c0-78e9-4208-b7fc-ca694876de7d'); /* Replace with your image URL */
-            background-size: cover;
-            background-position: center;
-            color: white; /* Optional: makes text visible on a potentially dark background */
-        }
+    text-align: center;
+    padding: 20px;
+    background-image: url('https://res.cloudinary.com/dsjt220g8/image/upload/v1732521279/paper-texture_1_vjtlc6.jpg'); /* Replace with your image URL */
+    background-size: cover; /* Ensures the image covers the entire screen */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the background fixed during scrolling */
+    color: white; /* Optional: makes text visible on a potentially dark background */
+}
 
-        h1, p {
-            font-weight: bold;
-            font-style: italic;
-        }
+h1, p {
+    font-weight: bold;
+    font-style: italic;
+}
 
-        #loadingIndicator {
-            font-weight: bold;
-            font-style: italic;
-        }
+#loadingIndicator {
+    font-weight: bold;
+    font-style: italic;
+}
 
-        #mediaPreview {
-            font-weight: bold;
-            font-style: italic;
-        }
+#mediaPreview {
+    font-weight: bold;
+    font-style: italic;
+}
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {

@@ -1,72 +1,51 @@
-const QRCode = require('qrcode');
-const { createCanvas } = require('canvas');
+const axios = require('axios');
 
 /**
- * Generate a stylish QR code with circular design, black border, and custom center color.
+ * Generate a custom QR code with rounded borders and colorful dots using the QRCode API.
  * @param {string} text - The text or URL to encode in the QR code.
- * @returns {Promise<string>} - A promise that resolves to a data URL of the generated QR code.
+ * @returns {Promise<string>} - A promise that resolves to the data URL of the generated QR code in the selected format.
  */
-const generateQRCode = async (text) => {
+const generateCustomQRCode = async (text) => {
     try {
-        // Set size for the QR code and canvas
-        const size = 400;
-        const margin = 10;  // Define a margin to avoid QR code data being clipped
-        const qrSize = size - margin * 2;  // Adjust QR size based on margin
-        const qrCanvas = createCanvas(qrSize, qrSize);
+        const apiKey = 'zvjOYwhhM3hfwUGaINUUo8URN6h9sNWcbBhqgGPpClO2LcJiACRnaS-XHnZFlOzm'; // Replace with your QRCode API key
+        const apiUrl = `https://api.qr-code-generator.com/v1/create?access-token=${apiKey}`;
 
-        // Generate the QR code onto the canvas
-        await QRCode.toCanvas(qrCanvas, text, {
-            errorCorrectionLevel: 'H',
-            margin: margin
+        // Define payload with custom design parameters for rounded borders and colorful dots
+        const payload = {
+            qr_code_text: text,  // The text to encode (e.g., URL)
+            image_format: "JPG",  // You can choose JPG, PNG, SVG, or EPS
+            image_width: 500,      // Size of the generated image
+            download: 0,           // Return data (use 1 for download to browser)
+            foreground_color: "#FF33A1", // Color for the QR code body (e.g., red)
+            background_color: "#FFFFFF", // Background color (white)
+            marker_left_inner_color: "#33AFFF", // Color for inner of the top-left marker
+            marker_left_outer_color: "#33AFFF", // Outer color for top-left marker
+            marker_right_inner_color: "#33AFFF", // Inner color for top-right marker
+            marker_right_outer_color: "#33AFFF", // Outer color for top-right marker
+            marker_bottom_inner_color: "#33AFFF", // Inner color for bottom-left marker
+            marker_bottom_outer_color: "#33AFFF", // Outer color for bottom-left marker
+            marker_left_template: "version4",   // Rounded markers for the left position
+            marker_right_template: "version4",  // Rounded markers for the right position
+            marker_bottom_template: "version4", // Rounded markers for the bottom position
+            frame_color: "#000000",  // Frame color around the QR code (black)
+            frame_name: "no-frame"   // No frame around the QR code
+        };
+
+        // Make API request to generate the QR code
+        const response = await axios.post(apiUrl, payload, {
+            responseType: 'arraybuffer'  // Get the binary response for the image
         });
 
-        // Create a new canvas to create the circular QR code design
-        const canvas = createCanvas(size, size);
-        const ctx = canvas.getContext('2d');
+        // Convert binary data to base64 URL for inline display
+        const qrCodeDataUrl = `data:image/jpeg;base64,${Buffer.from(response.data).toString('base64')}`;
 
-        // Random center color
-        const randomColor = `hsl(${Math.random() * 360}, 100%, 50%)`; // Random hue color
+        console.log("Custom QR Code generated successfully.");
+        return qrCodeDataUrl; // Return the generated QR code as a data URL
 
-        // Draw a black circular border
-        const radius = size / 2;
-        ctx.beginPath();
-        ctx.arc(size / 2, size / 2, radius, 0, 2 * Math.PI);
-        ctx.fillStyle = 'black';
-        ctx.fill();
-
-        // Draw a smaller circle in the center with the random color
-        const innerRadius = radius - 20; // Slightly smaller than the outer circle
-        ctx.beginPath();
-        ctx.arc(size / 2, size / 2, innerRadius, 0, 2 * Math.PI);
-        ctx.fillStyle = randomColor;
-        ctx.fill();
-
-        // Create a circular mask and apply it to the QR code
-        ctx.save(); // Save current drawing state
-        ctx.beginPath();
-        ctx.arc(size / 2, size / 2, innerRadius, 0, 2 * Math.PI);
-        ctx.clip(); // Set the clipping region to the circle
-
-        // Draw the QR code onto the circular mask
-        ctx.drawImage(qrCanvas, margin, margin, qrSize, qrSize); // Position the QR code inside the circle
-        ctx.restore(); // Restore drawing state to remove clipping mask
-
-        // Draw the "Scan Me" text on the border
-        ctx.font = '24px Arial';
-        ctx.fillStyle = 'white';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('', size / 2, size / 2);
-
-        // Convert the styled canvas to a data URL
-        const qrCodeDataUrl = canvas.toDataURL();
-
-        console.log("QR Code generated successfully");
-        return qrCodeDataUrl; // Return the QR code as a data URL
     } catch (error) {
-        console.error("Error generating QR code:", error);
+        console.error("Error generating custom QR code:", error.message);
         throw new Error("QR Code generation failed.");
     }
 };
 
-module.exports = generateQRCode;
+module.exports = generateCustomQRCode;
